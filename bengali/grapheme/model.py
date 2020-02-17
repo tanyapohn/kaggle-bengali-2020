@@ -1,8 +1,8 @@
 from torch import nn
 
-from bengali.grapheme.densenet_model import DenseNetBase, DenseNetHead
-from bengali.grapheme.resnet_model import ResNetBase, ResNetHead
-from bengali.grapheme.vgg_model import VGGBase, VGGHead
+from bengali.models.densenet_model import DenseNetBase, DenseNetHead
+from bengali.models.resnet_model import ResNetBase, ResNetHead
+from bengali.models.vgg_model import VGGBase, VGGHead
 
 
 def build_model(base: str, n_classes: int, **kwargs) -> nn.Module:
