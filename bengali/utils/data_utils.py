@@ -3,9 +3,9 @@ from typing import Tuple
 
 import pandas as pd
 
-ROOT = os.path.dirname('/home/mod/Workspace/kaggle/Bengali/')
+ROOT = os.path.dirname('/home/mod961094/Workspace/Bengali/')
 # DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-origin')
-DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-128x128')
+DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-224x224')
 
 
 def get_image_path(item: pd.DataFrame, root: str) -> str:
