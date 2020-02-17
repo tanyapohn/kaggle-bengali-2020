@@ -16,16 +16,14 @@ from bengali.utils.data_utils import load_train_valid_df, DATA_ROOT
 
 
 def save_checkpoint(
-        state: Dict, output_dir: str, is_best: bool, epoch: int,
-        best_acc: float, filename='checkpoint.pth',
+        state: Dict, output_dir: str, fold: int,
+        is_best: bool, best_acc: float,
 ):
-    torch.save(state, os.path.join(output_dir, filename))
-    if epoch % 20 == 0:
-        torch.save(state['state_dict'], os.path.join(output_dir, f'model_{epoch}.pth'))
+    torch.save(state, os.path.join(output_dir, f'checkpoint_{fold}.pth'))
     if is_best:
         # shutil.copyfile(filename, 'model_best.pth')
         print(f'Update best model with accuracy: {best_acc}\n')
-        torch.save(state['state_dict'], os.path.join(output_dir, 'model_best.pth'))
+        torch.save(state['state_dict'], os.path.join(output_dir, f'model_best_{fold}.pth'))
 
 
 def main():
@@ -42,7 +40,7 @@ def main():
     arg('--batch-size', type=int, default=64)
     arg('--fold', type=int)
     arg('--lr', default=25e-3, type=float, help='initial learning rate')
-    arg('--min-lr', default=1e-10, type=float)
+    arg('--min-lr', default=1e-7, type=float)
     arg('--optimizer', default='sgd', type=str)
     arg('--momentum', default=0.9, type=float)
     arg('--weight-decay', default=1e-4, type=float, help='weight decay')
@@ -51,6 +49,7 @@ def main():
     arg('--fp16', default=True, type=bool)
     arg('--pretrained', default=True, type=bool)
     arg('--cutmix-prob', default=0.5, type=float)
+    arg('--device', default=0, type=int)
 
     # Save path param
     arg('--output-dir', type=str)
@@ -88,7 +87,8 @@ def main():
         shuffle=True,
     )
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() else 'cpu')
+    torch.cuda.set_device(device)
     model: Module = build_model(
         base=args.base,
         pretrained=args.pretrained,
@@ -99,7 +99,7 @@ def main():
     model = model.to(device)
     parameters = model.parameters()
 
-    print(model)
+    # print(model)
 
     loss = nn.CrossEntropyLoss()
     if args.optimizer == 'sgd':
@@ -171,7 +171,7 @@ def main():
             'state_dict': model.state_dict(),
             'best_acc': best_acc,
             'optimizer': optimizer.state_dict(),
-        }, args.output_dir, is_best, epoch, best_acc)
+        }, args.output_dir, args.fold, is_best, best_acc)
 
         log['epoch'].append(epoch + 1)
         log['lr'].append(curr_lr)
