@@ -1,6 +1,5 @@
 import argparse
 import os
-from typing import Dict
 
 import pandas as pd
 import torch
@@ -10,20 +9,9 @@ from torch.utils.data import DataLoader
 
 from bengali.grapheme.dataset import get_transform, GraphemeDataset
 from bengali.grapheme.evaluator import eval_one_epoch
-from bengali.grapheme.models import build_model
+from bengali.grapheme.model import build_model
 from bengali.grapheme.trainer import train_one_epoch
-from bengali.utils.data_utils import load_train_valid_df, DATA_ROOT
-
-
-def save_checkpoint(
-        state: Dict, output_dir: str, fold: int,
-        is_best: bool, best_acc: float,
-):
-    torch.save(state, os.path.join(output_dir, f'checkpoint_{fold}.pth'))
-    if is_best:
-        # shutil.copyfile(filename, 'model_best.pth')
-        print(f'Update best model with accuracy: {best_acc}\n')
-        torch.save(state['state_dict'], os.path.join(output_dir, f'model_best_{fold}.pth'))
+from bengali.utils.data_utils import load_train_valid_df, DATA_ROOT, save_checkpoint
 
 
 def main():

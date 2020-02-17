@@ -1,11 +1,23 @@
 import os
-from typing import Tuple
+from typing import Dict, Tuple
 
 import pandas as pd
+import torch
 
 ROOT = os.path.dirname('/home/mod961094/Workspace/Bengali/')
 # DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-origin')
 DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-224x224')
+
+
+def save_checkpoint(
+        state: Dict, output_dir: str, fold: int,
+        is_best: bool, best_acc: float,
+):
+    torch.save(state, os.path.join(output_dir, f'checkpoint_{fold}.pth'))
+    if is_best:
+        # shutil.copyfile(filename, 'model_best.pth')
+        print(f'Update best model with accuracy: {best_acc}\n')
+        torch.save(state['state_dict'], os.path.join(output_dir, f'model_best_{fold}.pth'))
 
 
 def get_image_path(item: pd.DataFrame, root: str) -> str:
