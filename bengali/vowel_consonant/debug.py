@@ -172,8 +172,10 @@ def main():
             scheduler.step(valid_loss)
 
         print(f'\nTrain loss: {train_loss}\t Train acc: {train_acc}')
+        print(f'Vowel: {train_vowel_acc}\t Consonant: {train_consonant_acc}\n')
 
         print(f'Valid loss: {valid_loss}\t Valid acc: {valid_acc}')
+        print(f'Vowel: {valid_vowel_acc}\t Consonant: {valid_consonant_acc}\n')
 
         # save checkpoint
         is_best = valid_acc > best_acc

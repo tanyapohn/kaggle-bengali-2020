@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 import pandas as pd
 import torch
 
-ROOT = os.path.dirname('/home/mod961094/Workspace/Bengali/')
+ROOT = os.path.dirname('/home/mod/Workspace/kaggle/Bengali/')
 # DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-origin')
 DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-224x224')
 

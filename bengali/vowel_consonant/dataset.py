@@ -21,8 +21,8 @@ def get_transform(
     if train:
         transforms = [
             A.CoarseDropout(
-                max_holes=8, max_height=30,
-                max_width=20, p=0.7),
+                max_holes=8, max_height=40,
+                max_width=40, p=0.6),
             A.ShiftScaleRotate(
                 shift_limit=0.0625,
                 scale_limit=0.1,
