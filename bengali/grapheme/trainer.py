@@ -12,7 +12,7 @@ from bengali.grapheme.cutmix import cutmix, cutmix_criterion
 def train_one_epoch(
         data_train_loader: DataLoader, model: Module,
         mixed_prob: float, fp16: bool, device,
-        loss: Callable, optimizer,
+        loss: Callable, optimizer, criterion: str,
 ) -> Tuple:
 
     cum_grapheme_loss = 0
@@ -35,7 +35,7 @@ def train_one_epoch(
             )
             pred_grapheme = model(input_image)
             grapheme_loss = cutmix_criterion(
-                pred_grapheme, targets,
+                pred_grapheme, targets, criterion,
             )
         else:
             pred_grapheme = model(input_image)

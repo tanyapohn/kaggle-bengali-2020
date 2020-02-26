@@ -6,7 +6,7 @@ import torch
 
 ROOT = os.path.dirname('/home/mod/Workspace/kaggle/Bengali/')
 # DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-origin')
-DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-224x224')
+DATA_ROOT = os.path.join(ROOT, 'grapheme-imgs-137x236')
 
 
 def save_checkpoint(
@@ -39,9 +39,11 @@ def load_train_valid_df(fold: int, task: str) -> Tuple:
     df = load_train_df()
     if task == 'grapheme':
         classes = int((df.nunique())[1:2])
-    else:
+    elif task == 'vowel+consonant':
         # vowel and consonant
         classes = list(df.nunique())[2:-3]
+    else:
+        classes = list(df.nunique())[1:-3]
 
     mask = df['fold'] == fold
     train = df[~mask]

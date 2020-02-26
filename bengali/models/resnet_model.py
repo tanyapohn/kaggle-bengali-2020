@@ -35,7 +35,7 @@ class ResNetBase(nn.Module):
 
         self.frozen = []
         if self.frozen_start:
-            self.frozen = [self.base.layer1, self.base.conv1, self.base.bn1]
+            self.frozen = [self.base.layer2, self.base.layer1, self.base.conv1]
             for m in self.frozen:
                 self._freeze(m)
 

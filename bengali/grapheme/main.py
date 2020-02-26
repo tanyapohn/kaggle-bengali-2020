@@ -12,6 +12,7 @@ from bengali.grapheme.evaluator import eval_one_epoch
 from bengali.grapheme.model import build_model
 from bengali.grapheme.trainer import train_one_epoch
 from bengali.utils.data_utils import load_train_valid_df, DATA_ROOT, save_checkpoint
+from bengali.utils.smooth_label_criterion import label_smoothing_criterion
 
 
 def main():
@@ -28,6 +29,8 @@ def main():
     arg('--batch-size', type=int, default=64)
     arg('--fold', type=int)
     arg('--lr', default=25e-3, type=float, help='initial learning rate')
+    arg('--max-height', default=10, type=int)
+    arg('--max-width', default=10, type=int)
     arg('--min-lr', default=1e-7, type=float)
     arg('--optimizer', default='sgd', type=str)
     arg('--momentum', default=0.9, type=float)
@@ -36,7 +39,10 @@ def main():
     arg('--epochs', type=int)
     arg('--fp16', default=True, type=bool)
     arg('--pretrained', default=True, type=bool)
+    arg('--frozen', default=False, type=bool)
+    arg('--no-cutmix', default=False, type=bool)
     arg('--cutmix-prob', default=0.5, type=float)
+    arg('--loss', default='cross_entropy', type=str)
     arg('--device', default=0, type=int)
 
     # Save path param
@@ -51,6 +57,9 @@ def main():
                 train=train,
                 test_size=test_size,
                 normalize=normalise,
+                max_height=args.max_height,
+                max_width=args.max_width,
+                no_cutmix=args.no_cutmix,
             ) for test_size in test_sizes]
 
     def make_test_data_loader(df):
@@ -80,6 +89,7 @@ def main():
     model: Module = build_model(
         base=args.base,
         pretrained=args.pretrained,
+        frozen_start=args.frozen,
         n_classes=classes,
     )
     torch.backends.cudnn.benchmark = True
@@ -88,8 +98,11 @@ def main():
     parameters = model.parameters()
 
     # print(model)
+    if args.loss == 'cross_entropy':
+        loss = nn.CrossEntropyLoss()
+    else:
+        loss = label_smoothing_criterion()
 
-    loss = nn.CrossEntropyLoss()
     if args.optimizer == 'sgd':
         optimizer = optim.SGD(
             params=parameters, lr=args.lr,
@@ -105,7 +118,7 @@ def main():
     else:
         scheduler = optim.lr_scheduler.ReduceLROnPlateau(
             optimizer, mode='min', verbose=True,
-            factor=0.77, patience=2, min_lr=args.min_lr,
+            factor=0.7, patience=2, min_lr=args.min_lr,
         )
 
     if args.fp16:
@@ -132,7 +145,7 @@ def main():
         # train
         train_loss, train_acc = train_one_epoch(
             data_train_loader, model, args.cutmix_prob,
-            args.fp16, device, loss, optimizer,
+            args.fp16, device, loss, optimizer, args.loss,
         )
         # eval
         valid_loss, valid_acc = eval_one_epoch(

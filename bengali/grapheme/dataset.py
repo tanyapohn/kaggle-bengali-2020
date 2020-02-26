@@ -16,24 +16,47 @@ def get_transform(
         train: bool,
         test_size: int,
         normalize: bool = True,
-        ) -> Callable:
-    if train:
+        no_cutmix: bool = True,
+        max_height: int,
+        max_width: int,
+) -> Callable:
+
+    if train and no_cutmix:
         transforms = [
+            A.Resize(height=test_size, width=test_size),
+            A.CoarseDropout(
+                max_holes=8, max_height=max_height,
+                max_width=max_width, fill_value=255, p=0.7),
             A.ShiftScaleRotate(
                 shift_limit=0.0625,
                 scale_limit=0.1,
-                rotate_limit=30,
+                rotate_limit=45,
                 p=0.5
             ),
+            A.RandomBrightnessContrast(),
+            A.GaussianBlur(),
+            A.GaussNoise(),
+        ]
+    elif train:
+        transforms = [
+            A.Resize(height=test_size, width=test_size),
+            A.ShiftScaleRotate(
+                shift_limit=0.0625,
+                scale_limit=0.1,
+                rotate_limit=45,
+                p=0.5
+            ),
+            A.RandomBrightnessContrast(),
+            A.GaussianBlur(),
+            A.GaussNoise(),
         ]
     else:
         transforms = [
-            A.LongestMaxSize(test_size),
+            A.Resize(height=test_size, width=test_size),
         ]
 
     if normalize:
-        transforms.append(A.Normalize(mean=(0.0692, 0.0692, 0.0692),
-                                      std=(0.2052, 0.2052, 0.2052)))
+        transforms.append(A.Normalize())
 
     transforms.extend([
         ToTensorV2(),

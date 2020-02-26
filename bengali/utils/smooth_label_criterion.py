@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+from torch.nn import functional as F
 
 
 class SmoothLabelCritierion(nn.Module):
@@ -12,7 +13,7 @@ class SmoothLabelCritierion(nn.Module):
     def __init__(self, label_smoothing=0.0):
         super(SmoothLabelCritierion, self).__init__()
         self.label_smoothing = label_smoothing
-        self.LogSoftmax = nn.LogSoftmax()
+        self.LogSoftmax = nn.LogSoftmax(dim=1)
 
         # When label smoothing is turned on, KL-divergence is minimized
         # If label smoothing value is set to zero, the loss
@@ -49,3 +50,46 @@ class SmoothLabelCritierion(nn.Module):
             gtruth = tmp_.detach()
         loss = self.criterion(scores, gtruth)
         return loss
+
+
+def onehot_encoding(label, n_classes):
+    return torch.zeros(label.size(0), n_classes).to(label.device).scatter_(
+        1, label.view(-1, 1), 1)
+
+
+def cross_entropy_loss(input, target, reduction):
+    logp = F.log_softmax(input, dim=1)
+    loss = torch.sum(-logp * target, dim=1)
+    if reduction == 'none':
+        return loss
+    elif reduction == 'mean':
+        return loss.mean()
+    elif reduction == 'sum':
+        return loss.sum()
+    else:
+        raise ValueError(
+            '`reduction` must be one of \'none\', \'mean\', or \'sum\'.')
+
+
+def label_smoothing_criterion(epsilon=0.1, reduction='mean'):
+    def _label_smoothing_criterion(preds, targets):
+        n_classes = preds.size(1)
+        device = preds.device
+
+        onehot = onehot_encoding(targets, n_classes).float().to(device)
+        targets = (
+                onehot * (1 - epsilon) + torch.ones_like(onehot).to(device)
+                * epsilon / n_classes
+        )
+        loss = cross_entropy_loss(preds, targets, reduction)
+        if reduction == 'none':
+            return loss
+        elif reduction == 'mean':
+            return loss.mean()
+        elif reduction == 'sum':
+            return loss.sum()
+        else:
+            raise ValueError(
+                '`reduction` must be one of \'none\', \'mean\', or \'sum\'.')
+
+    return _label_smoothing_criterion

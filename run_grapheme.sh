@@ -1,17 +1,20 @@
 #!/bin/bash
 
-source "/home/mod961094/.local/share/virtualenvs/Workspace-n_bFWxY_/bin/activate"
+source "/home/mod/.local/share/virtualenvs/Workspace-lCUZRoor/bin/activate"
 
 for fold in 0 1 2 3;
 do
     echo "fold ${fold}"
     python -m bengali.grapheme.main \
-          --test-size 224 \
-          --base 'resnext50_32x4d' \
-          --batch-size 64 \
+          --test-size 64 \
+          --base 'se_resnext50_32x4d' \
+          --batch-size 48 \
           --fold ${fold} \
-          --lr 20e-3 \
-          --epochs 90 \
-          --device 1 \
-          --output-dir '/home/mod961094/Workspace/bengali-experiments/'
+          --lr 3e-3 \
+          --min-lr 1e-5 \
+          --loss 'smooth' \
+          --cutmix-prob 0.5 \
+          --epochs 45 \
+          --device 0 \
+          --output-dir '/home/mod/Workspace/bengali-experiments/grapheme_64_se_resnext101_cutmix/'
 done

@@ -3,6 +3,7 @@ from torch import nn
 from bengali.models.densenet_model import DenseNetBase, DenseNetHead
 from bengali.models.resnet_model import ResNetBase, ResNetHead
 from bengali.models.vgg_model import VGGBase, VGGHead
+from bengali.models.senet import SENetBase, SENetHead
 
 
 def build_model(base: str, n_classes: int, **kwargs) -> nn.Module:
@@ -18,6 +19,14 @@ class Model(nn.Module):
             self.base = ResNetBase(base, **base_kwargs)
             self.in_features = self.base.out_features
             self.head = ResNetHead(
+                in_features=self.in_features,
+                n_classes=n_classes,
+            )
+        elif base.startswith('se_'):
+
+            self.base = SENetBase(base, **base_kwargs)
+            self.in_features = self.base.out_features
+            self.head = SENetHead(
                 in_features=self.in_features,
                 n_classes=n_classes,
             )

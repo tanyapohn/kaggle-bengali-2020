@@ -2,6 +2,8 @@ import numpy as np
 import torch
 from torch import nn
 
+from bengali.utils.smooth_label_criterion import label_smoothing_criterion
+
 
 def rand_bbox(size, lam):
     W = size[2]
@@ -42,11 +44,14 @@ def cutmix(data, target, alpha):
     return data, targets
 
 
-def cutmix_criterion(preds, targets):
+def cutmix_criterion(preds, targets, loss):
     target, shuffled_target, lam = (
         targets[0], targets[1], targets[2],
     )
-    criterion = nn.CrossEntropyLoss(reduction='mean')
+    if loss == 'cross_entropy':
+        criterion = nn.CrossEntropyLoss(reduction='mean')
+    else:
+        criterion = label_smoothing_criterion(reduction='mean')
     return (
             lam * criterion(preds, target) + (1 - lam) * criterion(preds, shuffled_target)
     )
