@@ -1,5 +1,4 @@
-from typing import Callable, Tuple
-from typing import List
+from typing import Callable, Tuple, List
 
 import albumentations as A
 import cv2

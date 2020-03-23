@@ -7,7 +7,7 @@ class SENetHead(nn.Module):
     def __init__(self, in_features: int, n_classes: int):
         super().__init__()
 
-        self.avg_pool = nn.AvgPool2d(7, stride=1)
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.dropout = nn.Dropout(0.2)
         self.last_linear = nn.Linear(in_features, n_classes)
 
