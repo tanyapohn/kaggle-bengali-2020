@@ -1,6 +1,7 @@
 # Kaggle-Bengali-2020
 
-74th place solution with a private score of `0.9361` for 
+75th place solution (Top 4%) that I didn't choose it as a final score with a private 
+score of `0.9361` for 
 [Bengali.AI Handwritten Grapheme Classification](https://www.kaggle.com/c/bengaliai-cv19)
 
 Contents
