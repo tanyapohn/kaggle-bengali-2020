@@ -14,6 +14,8 @@ class Model(nn.Module):
     def __init__(self, *, base: str, n_classes: int, **base_kwargs,):
         super().__init__()
 
+        # TODO: Put spatial transform here
+
         if base.startswith('resne'):
 
             self.base = ResNetBase(base, **base_kwargs)

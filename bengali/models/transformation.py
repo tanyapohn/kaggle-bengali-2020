@@ -1,7 +1,7 @@
 """
 The source code is from Clova.ai with no changes have been made.
 Only factoring the code.
-https://github.com/clovaai/deep-text-recognition-benchmark/
+https://github.com/clovaai/deep-text-recognition-benchmark/blob/master/modules/transformation.py
 """
 
 

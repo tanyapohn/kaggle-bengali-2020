@@ -34,8 +34,6 @@ def get_transform(
                 p=0.5
             ),
             A.RandomBrightnessContrast(),
-            A.GaussianBlur(),
-            A.GaussNoise(),
         ]
     elif train:
         transforms = [
@@ -47,8 +45,6 @@ def get_transform(
                 p=0.5
             ),
             A.RandomBrightnessContrast(),
-            A.GaussianBlur(),
-            A.GaussNoise(),
         ]
     else:
         transforms = [

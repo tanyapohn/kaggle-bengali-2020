@@ -16,11 +16,13 @@ def get_transform(
         *,
         train: bool,
         test_size: int,
+        normalize: bool = True,
+        no_cutmix: bool = True,
         max_height: int,
         max_width: int,
-        normalize: bool = True,
-        ) -> Callable:
-    if train:
+) -> Callable:
+
+    if train and no_cutmix:
         transforms = [
             A.Resize(height=test_size, width=test_size),
             A.CoarseDropout(
@@ -33,8 +35,17 @@ def get_transform(
                 p=0.5
             ),
             A.RandomBrightnessContrast(),
-            A.GaussianBlur(),
-            A.GaussNoise(),
+        ]
+    elif train:
+        transforms = [
+            A.Resize(height=test_size, width=test_size),
+            A.ShiftScaleRotate(
+                shift_limit=0.0625,
+                scale_limit=0.1,
+                rotate_limit=45,
+                p=0.5
+            ),
+            A.RandomBrightnessContrast(),
         ]
     else:
         transforms = [

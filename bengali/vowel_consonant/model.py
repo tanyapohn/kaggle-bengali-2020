@@ -4,6 +4,7 @@ from torch import nn
 
 from bengali.models.densenet_model import DenseNetBase, DenseNetHead
 from bengali.models.resnet_model import ResNetBase, ResNetHead
+from bengali.models.transformation import TPS_SpatialTransformerNetwork
 from bengali.models.vgg_model import VGGBase, VGGHead
 
 
@@ -15,6 +16,12 @@ class Model(nn.Module):
     def __init__(self, *, base: str, n_classes: List[int], **base_kwargs,):
         super().__init__()
 
+        self.transformation = TPS_SpatialTransformerNetwork(
+            F=20,
+            I_size=(224, 224),
+            I_r_size=(224, 224),
+            I_channel_num=3,
+        )
         if base.startswith('resne'):
 
             self.base = ResNetBase(base, **base_kwargs)

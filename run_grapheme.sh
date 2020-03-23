@@ -1,12 +1,14 @@
 #!/bin/bash
 
+# to activate the virtual environment, change here
 source "/home/mod/.local/share/virtualenvs/Workspace-lCUZRoor/bin/activate"
 
+# Grapheme with cutmix
 for fold in 0 1 2 3;
 do
     echo "fold ${fold}"
     python -m bengali.grapheme.main \
-          --test-size 64 \
+          --test-size 128 \
           --base 'se_resnext50_32x4d' \
           --batch-size 48 \
           --fold ${fold} \
