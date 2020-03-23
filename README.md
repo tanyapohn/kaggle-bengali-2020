@@ -42,7 +42,7 @@ The highest private score is the experiment of separated training between `Graph
 
 `bengali/grapheme`: is grapheme model\
 `bengali/vowel_consonant`: is vowel and grapheme model with 
-[`Spatial Transform Network`](https://github.com/clovaai/deep-text-recognition-benchmark/blob/master/modules/transformation.py)\
+[`Spatial Transformer Network`](https://github.com/clovaai/deep-text-recognition-benchmark/blob/master/modules/transformation.py)\
 `bengali/grapheme_vowel_consonant`: is the model with 3 heads
 
 The reason behind training them separately is to avoid overfitting of `Vowel` and
@@ -56,7 +56,7 @@ Use this [public kernel](https://www.kaggle.com/iafoss/image-preprocessing-128x1
 process the images size of 224x224
 
 #### Augmentation
-For `Spatial Transforms Network`, I didn't do any extra augmentations.
+For `Spatial Transformer Network`, I didn't do any extra augmentations.
 ```python
 import albumentations as A
 
