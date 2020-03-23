@@ -1,3 +1,10 @@
+"""
+The source code is from Clova.ai with no changes have been made.
+Only factoring the code.
+https://github.com/clovaai/deep-text-recognition-benchmark/
+"""
+
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -45,7 +52,9 @@ class TPS_SpatialTransformerNetwork(nn.Module):
 
 
 class LocalizationNetwork(nn.Module):
-    """ Localization Network of RARE, which predicts C' (K x 2) from I (I_width x I_height) """
+    """
+    Localization Network of RARE, which predicts C' (K x 2) from I (I_width x I_height)
+    """
 
     def __init__(self, F, I_channel_num):
         super(LocalizationNetwork, self).__init__()
