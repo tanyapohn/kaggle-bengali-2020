@@ -97,4 +97,4 @@ $ bash /path/to/project/run_vowel_consonant.sh
 ```
 
 ## Submission
-Code for submission has been written in this [kernel](https://www.kaggle.com/moximo13/spatial-transform-network-bengali?scriptVersionId=30658074)
+Code for submission has been written in this [kernel](https://www.kaggle.com/moximo13/spatial-transform-network-bengali?scriptVersionId=30662848)
