@@ -32,7 +32,7 @@ Bengali. For each approach, it's been briefed in this following table:
 
 | Experiments                   | Backbone                  | LB Score | Private Score |
 | ----------------------------- | -------------             | :------: | :-----------: |
-| Grapheme                      | Resnet50                  |          |               |
+| Grapheme                      | ResNext50                  |          |               |
 | Vowel + Consonant             | STN+ResNext50             | 0.9665   | **0.9361**    |
 | Grapheme + Vowel + Consonant  | SeResNext50               | 0.9776   | 0.9242        |
 | Grapheme + Vowel + Consonant  | SeResNext50 + DenseNet169 | 0.9770   | 0.9261        |
@@ -42,7 +42,7 @@ The highest private score is the experiment of separated training between `Graph
 
 `bengali/grapheme`: is grapheme model\
 `bengali/vowel_consonant`: is vowel and grapheme model with 
-[`Spatial Transform Network`](https://github.com/clovaai/deep-text-recognition-benchmark/)\
+[`Spatial Transform Network`](https://github.com/clovaai/deep-text-recognition-benchmark/blob/master/modules/transformation.py)\
 `bengali/grapheme_vowel_consonant`: is the model with 3 heads
 
 The reason behind training them separately is to avoid overfitting of `Vowel` and
